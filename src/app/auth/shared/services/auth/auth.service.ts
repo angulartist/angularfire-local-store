@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
 import { Store } from 'store';
@@ -6,6 +7,7 @@ import { Store } from 'store';
 import { User } from 'firebase';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { AngularFirestoreDocument, AngularFirestore } from 'angularfire2/firestore';
+
 
 export interface IUser {
     uid: string,
@@ -18,7 +20,7 @@ export interface IUser {
 @Injectable()
 export class AuthService {
 
-    auth$ = this._af.authState
+    auth$: Observable<User> = this._af.authState
         .pipe(
             tap(next => {
                 if (!next) {
@@ -47,7 +49,8 @@ export class AuthService {
             .createUserWithEmailAndPassword(email, password)
             .then(data => {
                 this.setUser(data.user);
-            });
+            })
+            .catch(err => console.log('ERROR: ', err));
     }
 
     loginUser(email: string, password: string): Promise<firebase.auth.UserCredential> {
@@ -55,7 +58,7 @@ export class AuthService {
             .signInWithEmailAndPassword(email, password);
     }
 
-    setUser(user: User) {
+    setUser(user: User): Promise<void> {
         const userRef: AngularFirestoreDocument<IUser> = this._db.doc(
             `users/${user.uid}`
         );
