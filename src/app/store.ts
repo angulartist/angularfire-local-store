@@ -1,7 +1,7 @@
 import { Observable, BehaviorSubject } from 'rxjs';
 import { distinctUntilChanged, pluck } from 'rxjs/operators';
 
-import { IUser } from './auth/shared/services/auth/auth.service';
+import { IUser } from './core/auth/shared/services/auth/auth.service';
 
 export interface State {
     user: IUser,

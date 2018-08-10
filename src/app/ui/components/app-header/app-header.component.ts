@@ -1,6 +1,6 @@
 import { Component, Output, EventEmitter, Input, ChangeDetectionStrategy } from '@angular/core';
 
-import { IUser } from '../../auth/shared/services/auth/auth.service';
+import { IUser } from '../../../core/auth/shared/services/auth/auth.service';
 
 @Component({
     selector: 'app-header',

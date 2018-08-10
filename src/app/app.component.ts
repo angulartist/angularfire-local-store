@@ -4,7 +4,7 @@ import { Observable, Subscription } from 'rxjs';
 
 import { Store } from 'store';
 
-import { AuthService, IUser } from './auth/shared/services/auth/auth.service';
+import { AuthService, IUser } from './core/auth/shared/services/auth/auth.service';
 
 
 @Component({

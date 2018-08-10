@@ -7,6 +7,7 @@ import { AuthFormComponent } from './components/auth-form/auth-form.component';
 
 // services
 import { AuthService } from './services/auth/auth.service';
+import { FirestoreService } from '../../firestore/firestore.service';
 
 @NgModule({
     imports: [
@@ -25,7 +26,8 @@ export class SharedModule {
         return {
             ngModule: SharedModule,
             providers: [
-                AuthService
+                AuthService,
+                FirestoreService
             ]
         }
     }
