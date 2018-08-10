@@ -1,0 +1,10 @@
+<auth-form (submitted)="loginUser($event)">
+    <h1>Connexion</h1>
+    <a routerLink="/auth/register">Inscription</a>
+    <button type="submit">
+        Connexion
+    </button>
+    <div class="error" *ngIf="error">
+        {{ error }}
+    </div>
+</auth-form>

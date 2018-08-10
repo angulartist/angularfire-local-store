@@ -1,0 +1,5 @@
+<div class="app-header">
+    <div class="app-header__user-info" *ngIf="user?.authenticated">
+        <span (click)="logoutUser()">Quitter</span>
+    </div>
+</div>
