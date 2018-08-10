@@ -14,7 +14,10 @@ export interface IUser {
     email: string,
     displayName: string,
     avatar: string,
-    authenticated: boolean
+    authenticated: boolean,
+    creationTime: string,
+    lastSignInTime: string
+
 }
 
 @Injectable()
@@ -32,7 +35,9 @@ export class AuthService {
                     email: next.email,
                     displayName: next.displayName,
                     avatar: next.photoURL,
-                    authenticated: true
+                    authenticated: true,
+                    creationTime: next.metadata.creationTime,
+                    lastSignInTime: next.metadata.lastSignInTime
                 };
                 this._store.set('user', user);
             })
@@ -68,7 +73,9 @@ export class AuthService {
             email: user.email,
             displayName: user.displayName || 'Anonyme',
             avatar: user.photoURL || `https://api.adorable.io/avatars/${user.uid}`,
-            authenticated: false
+            authenticated: false,
+            creationTime: user.metadata.creationTime,
+            lastSignInTime: user.metadata.lastSignInTime
         };
 
         return userRef.set(data, { merge: true });
