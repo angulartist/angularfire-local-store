@@ -9,7 +9,6 @@ import { AngularFirestoreModule } from 'angularfire2/firestore';
 
 // shared
 import { SharedModule } from './shared/shared.module';
-import { FirestoreService } from '../firestore/firestore.service';
 
 export const ROUTES: Routes = [
     {

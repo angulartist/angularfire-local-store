@@ -1,0 +1,27 @@
+<div>
+  <a [routerLink]="getRoute(item)">
+    <p>
+      {{ item.name }}
+    </p>
+    <span>
+      {{ item.ingredients }}
+    </span>
+  </a>
+
+  <div *ngIf="toggled">
+    <p>
+      Delete item ?
+    </p>
+    <button type="button" (click)="removeItem()">
+      Yes
+    </button>
+    <button type="button" (click)="toggle()">
+      No
+    </button>
+  </div>
+
+  <button type="button"
+  (click)="toggle()">
+  Remove
+  </button>
+</div>

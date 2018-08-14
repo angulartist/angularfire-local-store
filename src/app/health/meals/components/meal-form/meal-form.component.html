@@ -1,0 +1,26 @@
+<div>
+  <form [formGroup]="form">
+    <input type="text" placeholder="name" formControlName="name">
+    <p>
+      <button type="button"
+      (click)="addIngredients()">
+        Add food
+      </button>
+    </p>
+    <div formArrayName="ingredients">
+      <label *ngFor="let c of ingredients.controls; index as i;">
+        <input [formControlName]="i" placeholder="oeux">
+        <span (click)="removeIngredients(i)">rem</span>
+      </label>
+    </div>
+    <p>
+      <button type="button"
+      (click)="createMeal()">
+      Créer
+      </button>
+    </p>
+    <p>
+      <a [routerLink]="['../']">Annuler</a>
+    </p>
+  </form>
+</div>

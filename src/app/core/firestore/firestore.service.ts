@@ -8,6 +8,7 @@ import {
 } from "angularfire2/firestore";
 import * as firebase from "firebase/app";
 
+// CUSTOM TYPES
 type CollectionPredicate<T> = string | AngularFirestoreCollection<T>;
 type DocPredicate<T> = string | AngularFirestoreDocument<T>;
 
@@ -17,6 +18,7 @@ type DocPredicate<T> = string | AngularFirestoreDocument<T>;
 export class FirestoreService {
   constructor(public _db: AngularFirestore) {}
 
+  // REF
   col<T>(ref: CollectionPredicate<T>, queryFn?): AngularFirestoreCollection<T> {
     return typeof ref === "string" ? this._db.collection<T>(ref, queryFn) : ref;
   }
@@ -25,7 +27,52 @@ export class FirestoreService {
     return typeof ref === "string" ? this._db.doc<T>(ref) : ref;
   }
 
+  // TIMESTAMP
+  get timestamp() {
+    return firebase.firestore.FieldValue.serverTimestamp();
+  }
+
+  // CREATE
+  // add a document to a collection
+  add<T>(
+    ref: CollectionPredicate<T>,
+    data
+  ): Promise<firebase.firestore.DocumentReference> {
+    const timestamp = this.timestamp;
+    return this.col(ref).add({
+      ...data,
+      updatedAt: timestamp,
+      createdAt: timestamp
+    });
+  }
+
+  // upsert a document to a collection
+  upsert<T>(ref: DocPredicate<T>, data: any): Promise<void> {
+    const doc = this.doc(ref)
+      .snapshotChanges()
+      .pipe(take(1))
+      .toPromise();
+
+    return doc.then(snap => {
+      return snap.payload.exists ? this.update(ref, data) : this.set(ref, data);
+    });
+  }
+
+  // set a document to a collection w/o overwrite
+  set<T>(ref: DocPredicate<T>, data: any): Promise<void> {
+    const timestamp = this.timestamp;
+    return this.doc(ref).set(
+      {
+        ...data,
+        updatedAt: timestamp,
+        createdAt: timestamp
+      },
+      { merge: true }
+    );
+  }
+
   // READ
+  // get doc without uid
   doc$<T>(ref: DocPredicate<T>): Observable<T> {
     return this.doc(ref)
       .snapshotChanges()
@@ -36,18 +83,21 @@ export class FirestoreService {
       );
   }
 
-  col$<T>(ref: CollectionPredicate<T>, queryFn?): Observable<T[]> {
-    return this.col(ref, queryFn)
+  // get a doc from a collection with the uid
+  docWithId$<T>(ref: DocPredicate<T>): Observable<T> {
+    return this.doc(ref)
       .snapshotChanges()
       .pipe(
-        map(docs => {
-          return docs.map(a => a.payload.doc.data()) as T[];
+        map(actions => {
+          const data = actions.payload.data() as any;
+          const uid = actions.payload.id;
+          return { uid, ...data };
         })
       );
   }
 
-  // READ - ID
-  getItems$<T>(ref: CollectionPredicate<T>, queryFn?): Observable<T[]> {
+  // get the entier collection with the uid
+  col$<T>(ref: CollectionPredicate<T>, queryFn?): Observable<T[]> {
     return this.col(ref, queryFn)
       .snapshotChanges()
       .pipe(
@@ -61,61 +111,7 @@ export class FirestoreService {
       );
   }
 
-  getItem$<T>(
-    ref: CollectionPredicate<T>,
-    uid: string,
-    queryFn?
-  ): Observable<T> {
-    return this.col(ref, queryFn)
-      .doc(`/${uid}`)
-      .snapshotChanges()
-      .pipe(
-        map(actions => {
-          const data = actions.payload.data() as any;
-          const uid = actions.payload.id;
-          return { uid, ...data };
-        })
-      );
-  }
-
-  get timestamp() {
-    return firebase.firestore.FieldValue.serverTimestamp();
-  }
-
-  // CREATE
-  add<T>(
-    ref: CollectionPredicate<T>,
-    data
-  ): Promise<firebase.firestore.DocumentReference> {
-    const timestamp = this.timestamp;
-    return this.col(ref).add({
-      ...data,
-      updatedAt: timestamp,
-      createdAt: timestamp
-    });
-  }
-
-  upsert<T>(ref: DocPredicate<T>, data: any): Promise<void> {
-    const doc = this.doc(ref)
-      .snapshotChanges()
-      .pipe(take(1))
-      .toPromise();
-
-    return doc.then(snap => {
-      return snap.payload.exists ? this.update(ref, data) : this.set(ref, data);
-    });
-  }
-
-  set<T>(ref: DocPredicate<T>, data: any): Promise<void> {
-    const timestamp = this.timestamp;
-    return this.doc(ref).set({
-      ...data,
-      updatedAt: timestamp,
-      createdAt: timestamp
-    });
-  }
-
-  // UPDATE
+  // UPDATE a document
   update<T>(ref: DocPredicate<T>, data: any): Promise<void> {
     return this.doc(ref).update({
       ...data,
@@ -123,12 +119,12 @@ export class FirestoreService {
     });
   }
 
-  // DELETE
+  // DELETE a document
   delete<T>(ref: DocPredicate<T>): Promise<void> {
     return this.doc(ref).delete();
   }
 
-  // inspect
+  // INSPECT a document
   inspectDoc(ref: DocPredicate<any>): void {
     const tick = new Date().getTime();
     this.doc(ref)
@@ -143,6 +139,7 @@ export class FirestoreService {
       .subscribe();
   }
 
+  // INSPECT a collection
   inspectCol(ref: CollectionPredicate<any>): void {
     const tick = new Date().getTime();
     this.col(ref)

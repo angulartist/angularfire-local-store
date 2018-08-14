@@ -6,7 +6,6 @@ import { Store } from "store";
 
 import { User } from "firebase";
 import { AngularFireAuth } from "angularfire2/auth";
-import { DocumentReference } from "angularfire2/firestore";
 
 // services
 import { FirestoreService } from "../../../../firestore/firestore.service";
@@ -48,6 +47,14 @@ export class AuthService {
     private _db: FirestoreService
   ) {}
 
+  get user(): User {
+    return this._af.auth.currentUser;
+  }
+
+  get authState(): Observable<User> {
+    return this._af.authState;
+  }
+
   createUser(email: string, password: string): Promise<void> {
     return this._af.auth
       .createUserWithEmailAndPassword(email, password)
@@ -64,18 +71,18 @@ export class AuthService {
     return this._af.auth.signInWithEmailAndPassword(email, password);
   }
 
-  setUser(user: User): Promise<DocumentReference> {
-    const data: IUser = {
-      uid: user.uid,
-      email: user.email,
-      displayName: user.displayName || "Anonyme",
-      avatar: user.photoURL || `https://api.adorable.io/avatars/${user.uid}`,
+  setUser(data: User): Promise<void> {
+    const user: IUser = {
+      uid: data.uid,
+      email: data.email,
+      displayName: data.displayName || "Anonyme",
+      avatar: data.photoURL || `https://api.adorable.io/avatars/${data.uid}`,
       authenticated: false,
-      creationTime: user.metadata.creationTime,
-      lastSignInTime: user.metadata.lastSignInTime
+      creationTime: data.metadata.creationTime,
+      lastSignInTime: data.metadata.lastSignInTime
     };
 
-    return this._db.add("users", data);
+    return this._db.set(`users/${data.uid}`, user);
   }
 
   logoutUser(): Promise<void> {

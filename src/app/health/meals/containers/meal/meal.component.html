@@ -1,0 +1,11 @@
+<div>
+  <div *ngIf="meal$ | async as meal; else title;">
+    <h2>{{ meal.name ? 'Edit' : 'Create' }}</h2>
+    <div>
+      <meal-form (create)="addMeal($event)"></meal-form>
+    </div>
+  </div>
+  <ng-template #title>
+    Loading...
+  </ng-template>
+</div>
