@@ -2,13 +2,15 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 
+// shared module
 import { SharedModule } from '../shared/shared.module';
 
-import { RegisterComponent } from './containers/register/register.component';
+// containers
+import * as fromContainers from './containers';
 
 export const ROUTES: Routes = [
     {
-        path: '', component: RegisterComponent
+        path: '', component: fromContainers.RegisterComponent
     }
 ]
 
@@ -19,7 +21,7 @@ export const ROUTES: Routes = [
         SharedModule
     ],
     declarations: [
-        RegisterComponent
+        ...fromContainers.containers
     ]
 })
 export class RegisterModule { }

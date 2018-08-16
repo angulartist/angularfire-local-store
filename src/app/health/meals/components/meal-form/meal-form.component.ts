@@ -13,13 +13,13 @@ export class MealFormComponent {
   @Output()
   create = new EventEmitter<IMeal>();
 
-  form = this._fb.group({
+  form = this.fb.group({
     name: ['', Validators.required],
-    ingredients: this._fb.array([''])
+    ingredients: this.fb.array([''])
   })
 
   constructor(
-    private _fb: FormBuilder
+    private fb: FormBuilder
   ) { }
 
   get ingredients(): FormArray {

@@ -6,21 +6,21 @@ import { RouterModule } from "@angular/router";
 import { AngularFirestoreModule } from "angularfire2/firestore";
 
 // components
-import { ListItemComponent } from './components/list-item/list-item.component';
+import * as fromComponents from './components';
 
 // services
-import { MealsService } from "./services/meals/meals.service";
+import * as fromServices from './services';
 
 @NgModule({
   imports: [CommonModule, RouterModule, AngularFirestoreModule],
-  declarations: [ListItemComponent],
-  exports: [ListItemComponent]
+  declarations: [...fromComponents.components],
+  exports: [...fromComponents.components]
 })
 export class SharedModule {
   static forRoot(): ModuleWithProviders {
     return {
       ngModule: SharedModule,
-      providers: [MealsService]
+      providers: [...fromServices.services]
     };
   }
 }

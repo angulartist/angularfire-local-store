@@ -8,7 +8,7 @@ import { User } from "firebase";
 import { AngularFireAuth } from "angularfire2/auth";
 
 // services
-import { FirestoreService } from "../../../../firestore/firestore.service";
+import { FirestoreService } from "../../../../services/firestore/firestore.service";
 
 export interface IUser {
   uid: string;

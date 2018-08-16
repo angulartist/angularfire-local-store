@@ -3,14 +3,14 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 
 // components
-import { AuthFormComponent } from './components/auth-form/auth-form.component';
+import * as fromComponents from './components';
 
 // services
 import { AuthService } from './services/auth/auth.service';
-import { FirestoreService } from '../../firestore/firestore.service';
+import { FirestoreService } from '../../services/firestore/firestore.service';
 
 // guards
-import { AuthGuard } from './guards/auth.guard';
+import * as fromGuards from './guards';
 
 @NgModule({
     imports: [
@@ -18,10 +18,10 @@ import { AuthGuard } from './guards/auth.guard';
         ReactiveFormsModule
     ],
     declarations: [
-        AuthFormComponent
+        ...fromComponents.components
     ],
     exports: [
-        AuthFormComponent
+        ...fromComponents.components
     ]
 })
 export class SharedModule {
@@ -31,7 +31,7 @@ export class SharedModule {
             providers: [
                 AuthService,
                 FirestoreService,
-                AuthGuard
+                ...fromGuards.guards
             ]
         }
     }

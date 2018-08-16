@@ -4,7 +4,7 @@ import { tap, filter, map } from "rxjs/operators";
 
 import { Store } from "store";
 
-import { FirestoreService } from "../../../../core/firestore/firestore.service";
+import { FirestoreService } from "../../../../core/services/firestore/firestore.service";
 import { AuthService } from "../../../../core/auth/shared/services/auth/auth.service";
 
 export interface IMeal {
@@ -17,34 +17,34 @@ export interface IMeal {
 
 @Injectable()
 export class MealsService {
-  meals$: Observable<any[]> = this._db
+  meals$: Observable<any[]> = this.db
     .col$(`meals`)
-    .pipe(tap(next => this._store.set("meals", next)));
+    .pipe(tap(next => this.store.set("meals", next)));
 
   constructor(
-    private _store: Store,
-    private _db: FirestoreService,
-    private _authService: AuthService
+    private store: Store,
+    private db: FirestoreService,
+    private authService: AuthService
   ) {}
 
   get uid(): string {
-    return this._authService.user.uid;
+    return this.authService.user.uid;
   }
 
   getMeal(key: string) {
     if (!key) return of({});
-    return this._store.select<IMeal[]>("meals").pipe(
+    return this.store.select<IMeal[]>("meals").pipe(
       filter(Boolean),
       map(meals => meals.find((meal: IMeal) => meal.uid === key))
     );
   }
 
   addMeal(meal: IMeal): Promise<firebase.firestore.DocumentReference> {
-    return this._db.add(`meals`, meal);
+    return this.db.add(`meals`, meal);
   }
 
   removeMeal(key: string): Promise<void> {
     console.log(key);
-    return this._db.delete(`meals/${key}`);
+    return this.db.delete(`meals/${key}`);
   }
 }

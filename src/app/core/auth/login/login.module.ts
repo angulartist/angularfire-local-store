@@ -2,13 +2,15 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 
+// shared module
 import { SharedModule } from '../shared/shared.module';
 
-import { LoginComponent } from './containers/login/login.component';
+// containers
+import * as fromContainers from './containers';
 
 export const ROUTES: Routes = [
     {
-        path: '', component: LoginComponent
+        path: '', component: fromContainers.LoginComponent
     }
 ]
 
@@ -19,7 +21,7 @@ export const ROUTES: Routes = [
         SharedModule
     ],
     declarations: [
-        LoginComponent
+        ...fromContainers.containers
     ]
 })
 export class LoginModule { }

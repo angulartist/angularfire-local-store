@@ -18,28 +18,28 @@ export class MealComponent implements OnInit, OnDestroy {
   subscription: Subscription;
 
   constructor(
-    private _mealsService: MealsService,
-    private _router: Router,
-    private _route: ActivatedRoute
+    private mealsService: MealsService,
+    private router: Router,
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit() {
-    this.subscription = this._mealsService.meals$.subscribe();
-    this.meal$ = this._route.params
+    this.subscription = this.mealsService.meals$.subscribe();
+    this.meal$ = this.route.params
       .pipe(
         switchMap(param => {
-          return this._mealsService.getMeal(param.id);
+          return this.mealsService.getMeal(param.id);
         })
       );
   }
 
   async addMeal(event: IMeal): Promise<void> {
-    await this._mealsService.addMeal(event);
+    await this.mealsService.addMeal(event);
     this.backToMeals();
   }
 
   backToMeals() {
-    this._router.navigate(['meals']);
+    this.router.navigate(['meals']);
   }
 
   ngOnDestroy() {
