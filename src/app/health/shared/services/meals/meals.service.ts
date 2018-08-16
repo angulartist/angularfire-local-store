@@ -44,7 +44,6 @@ export class MealsService {
   }
 
   removeMeal(key: string): Promise<void> {
-    console.log(key);
     return this.db.delete(`meals/${key}`);
   }
 }

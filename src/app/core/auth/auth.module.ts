@@ -5,6 +5,9 @@ import { RouterModule, Routes } from '@angular/router';
 // shared
 import { SharedModule } from './shared/shared.module';
 
+// guards
+import { NoAuthGuard } from './shared/guards/no-auth.guard';
+
 // routes
 export const ROUTES: Routes = [
     {
@@ -14,10 +17,12 @@ export const ROUTES: Routes = [
                 path: '', pathMatch: 'full', redirectTo: 'login'
             },
             {
-                path: 'login', loadChildren: './login/login.module#LoginModule'
+                path: 'login', loadChildren: './login/login.module#LoginModule',
+                canActivate: [NoAuthGuard]
             },
             {
-                path: 'register', loadChildren: './register/register.module#RegisterModule'
+                path: 'register', loadChildren: './register/register.module#RegisterModule',
+                canActivate: [NoAuthGuard]
             }
         ]
     }
