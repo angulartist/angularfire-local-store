@@ -7,7 +7,7 @@ import { Store } from "store";
 import {
   AuthService,
   IUser
-} from "./core/auth/shared/services/auth/auth.service";
+} from "./auth/shared/services/auth/auth.service";
 
 @Component({
   selector: "app-root",

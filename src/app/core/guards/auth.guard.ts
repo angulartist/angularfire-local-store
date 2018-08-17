@@ -3,7 +3,7 @@ import { Router, CanActivate } from "@angular/router";
 import { map } from "rxjs/operators";
 
 // services
-import { AuthService } from "../services/auth/auth.service";
+import { AuthService } from "../../auth/shared/services/auth/auth.service";
 
 @Injectable()
 export class AuthGuard implements CanActivate {

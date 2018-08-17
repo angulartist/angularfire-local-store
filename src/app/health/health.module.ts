@@ -5,7 +5,7 @@ import { RouterModule, Routes } from "@angular/router";
 import { SharedModule } from "./shared/shared.module";
 
 // guards
-import { AuthGuard } from "../core/auth/shared/guards/auth.guard";
+import { AuthGuard } from "../core/guards/auth.guard";
 
 // routing
 export const ROUTES: Routes = [

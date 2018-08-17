@@ -5,7 +5,7 @@ import { tap, filter, map } from "rxjs/operators";
 import { Store } from "store";
 
 import { FirestoreService } from "../../../../core/services/firestore/firestore.service";
-import { AuthService } from "../../../../core/auth/shared/services/auth/auth.service";
+import { AuthService } from "../../../../auth/shared/services/auth/auth.service";
 
 export interface IMeal {
   uid: string;
