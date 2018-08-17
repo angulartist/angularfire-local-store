@@ -10,8 +10,11 @@ import { AngularFirestoreModule } from 'angularfire2/firestore';
 // store
 import { Store } from "store";
 
-//core module
-import { CoreModule } from "./core";
+// core module
+import { CoreModule } from "./core/core.module";
+
+// shared modules
+import { SharedModule, AppHeaderComponent, AppNavComponent } from './shared';
 
 // feature modules
 import { AuthModule } from "./auth/auth.module";
@@ -19,8 +22,6 @@ import { HealthModule } from "./health/health.module";
 
 // components
 import { AppComponent } from "./app.component";
-import { AppHeaderComponent } from "./ui/components/app-header/app-header.component";
-import { AppNavComponent } from "./ui/components/app-nav/app-nav.component";
 
 
 //config
@@ -50,6 +51,7 @@ export const ROUTES: Routes = [
     AngularFireAuthModule,
     AngularFirestoreModule,
     CoreModule,
+    SharedModule,
     AuthModule,
     HealthModule
   ],
